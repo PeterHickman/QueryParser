@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse (QueryParser)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File queryparser.rb, line 53</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">a</span> = <span class="ruby-identifier">tokenise</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">b</span> = <span class="ruby-identifier">expand</span>(<span class="ruby-identifier">a</span>)
+    <span class="ruby-identifier">check_braces</span>(<span class="ruby-identifier">b</span>)
+    <span class="ruby-identifier">has_content</span>(<span class="ruby-identifier">b</span>)
+
+    <span class="ruby-identifier">c</span> = <span class="ruby-identifier">add_implicit_and</span>(<span class="ruby-identifier">b</span>)
+
+    <span class="ruby-identifier">d</span> = <span class="ruby-identifier">maketree</span>(<span class="ruby-identifier">c</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">Array</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">d</span> = [<span class="ruby-identifier">d</span>]
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">f</span> = <span class="ruby-identifier">process_not</span>(<span class="ruby-identifier">d</span>)
+    <span class="ruby-identifier">g</span> = <span class="ruby-identifier">process_and_or</span>(<span class="ruby-identifier">f</span>, <span class="ruby-value str">'and'</span>)
+    <span class="ruby-identifier">h</span> = <span class="ruby-identifier">process_and_or</span>(<span class="ruby-identifier">g</span>, <span class="ruby-value str">'or'</span>)
+
+    <span class="ruby-comment cmt"># Wrap everything in an and</span>
+    <span class="ruby-identifier">s</span> = <span class="ruby-constant">QueryParser</span><span class="ruby-operator">::</span><span class="ruby-constant">And</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">s</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">h</span>)
+
+    <span class="ruby-identifier">t</span> = <span class="ruby-identifier">reduce</span>(<span class="ruby-identifier">s</span>)
+
+    <span class="ruby-identifier">b</span> = <span class="ruby-constant">QueryParser</span><span class="ruby-operator">::</span><span class="ruby-constant">Or</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">b</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">t</span>.<span class="ruby-identifier">boostable</span>())
+
+    <span class="ruby-identifier">a</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">x</span> = <span class="ruby-identifier">t</span>.<span class="ruby-identifier">lucene</span>(<span class="ruby-ivar">@field</span>, <span class="ruby-ivar">@similarity</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'('</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">x</span> = <span class="ruby-node">&quot;+#{x}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span>
+      
+    <span class="ruby-ivar">@boosts</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">x</span> = [<span class="ruby-ivar">@similarity</span>, <span class="ruby-identifier">v</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">''</span>)
+      <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">lucene</span>(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">x</span>)
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,14 @@
+body {
+	background: #fff;
+	margin: 2em;
+	padding: 0;
+	font-size: 12px; 
+	font-family:Verdana, Arial, Helvetica;
+	color:#333;
+}
+
+pre {
+	border: 1px solid black;
+	padding: 5px;
+	background-color: #aBa2ff;
+}

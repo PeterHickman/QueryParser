@@ -1,0 +1,14 @@
+
+QueryParser - Parse a plain language query into Lucene syntax
+Copyright (C) 2008 Peter Hickman
+
+Parse a plain language query in the format
+
+  apple not banana
+
+  apple or banana and fig or date
+
+and change them into a format suitable for use with Lucene or Solr.
+The plain text query can include braces to group things and the Lucene
+query can include both a similarity value and field boosting
+
