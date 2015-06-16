@@ -1,0 +1,1 @@
+bundle exec ruby -I lib -I test -e 'ARGV.each { |path| require path }' ./test/tc_*.rb

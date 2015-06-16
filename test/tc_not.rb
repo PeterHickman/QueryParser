@@ -1,9 +1,6 @@
-#!/usr/bin/ruby
+require 'test_helper'
 
-require 'test/unit'
-require 'queryparser'
-
-class TC_Not < Test::Unit::TestCase
+class TC_Not < Minitest::Test
   def test_create_with_data
     n = QueryParser::Not.new('fred')
     assert_equal(QueryParser::Not, n.class)

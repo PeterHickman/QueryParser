@@ -1,9 +1,6 @@
-#!/usr/bin/ruby
+require 'test_helper'
 
-require 'test/unit'
-require 'queryparser'
-
-class TC_Bugs < Test::Unit::TestCase
+class TC_Bugs < Minitest::Test
   # Quoted term must be "this and that", no single quotes
   def test_quoted_terms_1
     qp = QueryParser.new("content")
@@ -26,7 +23,7 @@ class TC_Bugs < Test::Unit::TestCase
 
     assert_equal('content:"apple and banana"', x)
   end
-  
+
   # A sub list with only one item. These all came up in the first test session
   def test_sublist_1
     qp = QueryParser.new("content")
@@ -74,11 +71,11 @@ class TC_Bugs < Test::Unit::TestCase
   def test_empty_sublist
     qp = QueryParser.new("content")
 
-    assert_raise QueryParser::Exceptions::MalformedQuery do
+    assert_raises QueryParser::Exceptions::MalformedQuery do
       qp.parse("apple()")
     end
   end
-  
+
   # Precedence of 'and' and 'or'
   def test_precedence
     qp = QueryParser.new("content")
@@ -87,12 +84,12 @@ class TC_Bugs < Test::Unit::TestCase
 
     assert_equal(x1, x2)
   end
-  
+
   # These should be flagged as malformed
   def test_malformed_1
     qp = QueryParser.new("content")
 
-    assert_raise QueryParser::Exceptions::MalformedQuery do
+    assert_raises QueryParser::Exceptions::MalformedQuery do
       qp.parse("apple or and banana")
     end
   end
@@ -100,7 +97,7 @@ class TC_Bugs < Test::Unit::TestCase
   def test_malformed_2
     qp = QueryParser.new("content")
 
-    assert_raise QueryParser::Exceptions::EmptyQuery do
+    assert_raises QueryParser::Exceptions::EmptyQuery do
       qp.parse("and and and and")
     end
   end
@@ -108,7 +105,7 @@ class TC_Bugs < Test::Unit::TestCase
   def test_malformed_3
     qp = QueryParser.new("content")
 
-    assert_raise QueryParser::Exceptions::MalformedQuery do
+    assert_raises QueryParser::Exceptions::MalformedQuery do
       qp.parse('banana not')
     end
   end
@@ -116,7 +113,7 @@ class TC_Bugs < Test::Unit::TestCase
   def test_malformed_4
     qp = QueryParser.new("content")
 
-    assert_raise QueryParser::Exceptions::MalformedQuery do
+    assert_raises QueryParser::Exceptions::MalformedQuery do
       qp.parse('((banana not))')
     end
   end
@@ -124,38 +121,38 @@ class TC_Bugs < Test::Unit::TestCase
   # The effects of punctuation
   def test_punctuation_1
     qp = QueryParser.new("content")
-    
-    assert_raise QueryParser::Exceptions::EmptyQuery do
+
+    assert_raises QueryParser::Exceptions::EmptyQuery do
       qp.parse("$%^%^&$%*$%")
     end
   end
-  
+
   def test_punctuation_2
     qp = QueryParser.new("content")
-    
-    assert_raise QueryParser::Exceptions::EmptyQuery do
+
+    assert_raises QueryParser::Exceptions::EmptyQuery do
       qp.parse("$  %^%^   &$% *$%")
     end
   end
-  
+
   def test_punctuation_3
     qp = QueryParser.new("content")
 
     x = qp.parse("$  %^%apple^   &$% *$%")
     assert_equal('content:apple', x)
   end
-  
+
   # Surplus ( )
   def test_surplus_braces_1
     qp = QueryParser.new("content")
     qp.parse("fig ((apple banana cherry))")
   end
-  
+
   def test_surplus_braces_2
     qp = QueryParser.new("content")
     qp.parse("(apple and (not apple or fig))")
   end
-  
+
   def test_surplus_braces_3
     qp = QueryParser.new("content")
     qp.parse("(apple and not (not fig and fig and not elephant))")

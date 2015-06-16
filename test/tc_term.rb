@@ -1,9 +1,6 @@
-#!/usr/bin/ruby
+require 'test_helper'
 
-require 'test/unit'
-require 'queryparser'
-
-class TC_Terms < Test::Unit::TestCase
+class TC_Terms < Minitest::Test
   # Create an ordinary term of type 'term'
 	def test_create_plain_term
 	  t = QueryParser::Term.new('fred')
@@ -75,21 +72,21 @@ class TC_Terms < Test::Unit::TestCase
     assert_equal('")"', t.data)
     assert_equal('term:")"', t.inspect)
   end
-  
+
   # The case of the data should be unchanged
   def test_create_capital_data
     t = QueryParser::Term.new('FreD')
     assert_equal('FreD', t.data)
     assert_equal('term:FreD', t.inspect)
   end
-  
+
   # Can create with empty string as data
   def test_create_empty_string
     t = QueryParser::Term.new('')
     assert_equal('', t.data)
     assert_equal('term:', t.inspect)
   end
-  
+
   # Can create non 'term' with a nil as data
   def test_create_other_with_nil
     t = QueryParser::Term.new(nil)
