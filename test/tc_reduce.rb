@@ -14,7 +14,7 @@ class TC_Reduce < Minitest::Test
   def test_and_one_content
     t = QueryParser::Term.new('fred')
 
-    a1 = QueryParser::And.new()
+    a1 = QueryParser::And.new
     a1.add(t)
 
     a2 = a1.reduce
@@ -29,7 +29,7 @@ class TC_Reduce < Minitest::Test
     t1 = QueryParser::Term.new('fred')
     t2 = QueryParser::Term.new('other')
 
-    a1 = QueryParser::Or.new()
+    a1 = QueryParser::Or.new
     a1.add(t1)
     a1.add(t2)
 
@@ -53,11 +53,11 @@ class TC_Reduce < Minitest::Test
     t2 = QueryParser::Term.new('second')
     t3 = QueryParser::Term.new('third')
 
-    a1 = QueryParser::And.new()
+    a1 = QueryParser::And.new
     a1.add(t1)
     a1.add(t2)
 
-    a2 = QueryParser::And.new()
+    a2 = QueryParser::And.new
     a2.add(a1)
     a2.add(t3)
 
@@ -84,11 +84,11 @@ class TC_Reduce < Minitest::Test
     t2 = QueryParser::Term.new('second')
     t3 = QueryParser::Term.new('third')
 
-    o = QueryParser::Or.new()
+    o = QueryParser::Or.new
     o.add(t1)
     o.add(t2)
 
-    a1 = QueryParser::And.new()
+    a1 = QueryParser::And.new
     a1.add(o)
     a1.add(t3)
 

@@ -33,7 +33,7 @@ class TC_Set < Minitest::Test
     assert_equal(3, s.contents.size)
     assert_equal('<AND term:tom term:dick term:harry>', s.inspect)
 
-    a = Array.new
+    a = []
     a << THIS
     a << THAT
     a << OTHER

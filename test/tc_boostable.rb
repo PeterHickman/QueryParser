@@ -11,7 +11,7 @@ class TC_Boostable < Minitest::Test
   def test_term_default_negative
     t = QueryParser::Term.new('tom')
 
-    b = t.boostable()
+    b = t.boostable
 
     compare(t, b)
   end
@@ -37,7 +37,7 @@ class TC_Boostable < Minitest::Test
     t = QueryParser::Term.new('tom')
     n = QueryParser::Not.new(t)
 
-    b = n.boostable()
+    b = n.boostable
 
     assert_equal(NilClass, b.class)
   end
@@ -67,7 +67,7 @@ class TC_Boostable < Minitest::Test
     n1 = QueryParser::Not.new(t)
     n2 = QueryParser::Not.new(n1)
 
-    b = n2.boostable()
+    b = n2.boostable
 
     compare(t, b)
   end
@@ -83,7 +83,7 @@ class TC_Boostable < Minitest::Test
     s.add(t2)
     s.add(t3)
 
-    b = s.boostable()
+    b = s.boostable
 
     assert_equal(Array, b.class)
     assert_equal(3, b.size)
@@ -105,7 +105,7 @@ class TC_Boostable < Minitest::Test
     s.add(t2)
     s.add(n)
 
-    b = s.boostable()
+    b = s.boostable
 
     assert_equal(Array, b.class)
     assert_equal(2, b.size)
@@ -127,7 +127,7 @@ class TC_Boostable < Minitest::Test
     s.add(n2)
     s.add(t3)
 
-    b = s.boostable()
+    b = s.boostable
 
     assert_equal(Array, b.class)
     assert_equal(3, b.size)
