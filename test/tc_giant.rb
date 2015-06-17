@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 # This test is a monster and takes a long time to run
 # as it has 1,366,434 assertions to make. These tests
 # were made to shake out any edge cases that I had not
@@ -9,16 +7,16 @@
 # I like to keep them around but don't run them all the
 # time.
 
-require 'test/unit'
-require 'queryparser'
+require 'test_helper'
 
-class TC_Giant < Test::Unit::TestCase
-	def test_valid
-	  qp = QueryParser.new('content')
-	  counter = 0
-	
-	  File.open('test/all_valid.txt') do |f|
-	    f.each do |l|
+class TC_Giant < Minitest::Test
+  def test_valid
+    skip unless ENV['RUN_GIANT']
+    qp = QueryParser.new('content')
+    counter = 0
+
+    File.open('test/all_valid.txt') do |f|
+      f.each do |l|
         counter += 1
         l.chomp!
         assert_nothing_raised "line #{counter} #{l}" do
@@ -28,13 +26,14 @@ class TC_Giant < Test::Unit::TestCase
     end
   end
 
-	def test_invalid
-	  qp = QueryParser.new('content')
-	
-	  File.open('test/all_invalid.txt') do |f|
-	    f.each do |l|
+  def test_invalid
+    skip unless ENV['RUN_GIANT']
+    qp = QueryParser.new('content')
+
+    File.open('test/all_invalid.txt') do |f|
+      f.each do |l|
         l.chomp!
-        assert_raise QueryParser::Exceptions::MalformedQuery, QueryParser::Exceptions::UnbalancedBraces, QueryParser::Exceptions::EmptyQuery do
+        assert_raises QueryParser::Exceptions::MalformedQuery, QueryParser::Exceptions::UnbalancedBraces, QueryParser::Exceptions::EmptyQuery do
           qp.parse(l)
         end
       end

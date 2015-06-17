@@ -1,9 +1,6 @@
-#!/usr/bin/ruby
+require 'test_helper'
 
-require 'test/unit'
-require 'queryparser'
-
-class TC_Set < Test::Unit::TestCase
+class TC_Set < Minitest::Test
   TOM = QueryParser::Term.new('tom')
   DICK = QueryParser::Term.new('dick')
   HARRY = QueryParser::Term.new('harry')
@@ -13,7 +10,7 @@ class TC_Set < Test::Unit::TestCase
 
   def test_create
     s = QueryParser::And.new
-    
+
     assert_equal(0, s.contents.size)
     assert_equal('<AND >', s.inspect)
   end
@@ -35,8 +32,8 @@ class TC_Set < Test::Unit::TestCase
     s.add([TOM, DICK, HARRY])
     assert_equal(3, s.contents.size)
     assert_equal('<AND term:tom term:dick term:harry>', s.inspect)
-    
-    a = Array.new
+
+    a = []
     a << THIS
     a << THAT
     a << OTHER
@@ -44,7 +41,7 @@ class TC_Set < Test::Unit::TestCase
     assert_equal(6, s.contents.size)
     assert_equal('<AND term:tom term:dick term:harry term:this term:that term:other>', s.inspect)
   end
-  
+
   def test_another_way_to_add
     s = QueryParser::And.new
 
